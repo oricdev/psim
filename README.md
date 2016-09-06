@@ -1,2 +1,2 @@
 # psim
-&Psi;sim, the Phenomenon-simulator
+&Psi;sim, the Phenomenon-Simulator ... in progress
