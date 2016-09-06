@@ -1,2 +1,2 @@
 # psim
-<b>psi</b>m
+&Psi;sim, the Phenomenon-simulator
