@@ -1,0 +1,24 @@
+/* Log section */
+#logConsole {
+    background-color: #FFC4B5;
+}
+
+#logDetails {
+ background-color: #FFE4B5;
+}
+
+.logNormal {
+    color: #11557C;
+}
+
+.log_class_warning{
+    color: #FF7F50;
+}
+
+.log_class_important {
+    color: #FF1493;
+}
+
+.log_class_failure {
+    color: #9C1A1C;
+}

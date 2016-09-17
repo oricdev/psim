@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Psim</title>
+    <script type="text/javascript" src="./resources/scripts/three.js"></script>
+    <script type="text/javascript" src="./resources/scripts/main.js"></script>
+    <script type="text/javascript" src="./resources/scripts/myApplication.js"></script>
+    <script type="text/javascript" src="./resources/scripts/servicing.js"></script>
+    <link rel="stylesheet" type="text/css" href="./resources/styling/styles.css">
+</head>
+<body>
+
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div id="logConsole">
+    <fieldset>
+        <legend>Log</legend>
+        <div id="logDetails"></div>
+    </fieldset>
+
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        requestNextData();
+        var time_cycle = window.setInterval("doLoop()", 3000);
+    });
+
+
+
+</script>
+
+{% endblock %}
+
+</body>
+</html>
