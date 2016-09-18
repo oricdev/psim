@@ -1,6 +1,7 @@
 # System management
 import numpy as np
 from timeslot import *
+from entity import Entity
 from actors import Actors
 from receivers import Receivers
 from actorsreceivers import ActorsReceivers
@@ -21,8 +22,42 @@ class System:
         self.t_times.append(self.current_rel_time)
         # initialize groups of entities
         self.actors = Actors()
+        self.load_actors()
         self.receivers = Receivers()
+        self.load_receivers()
         self.actors_receivers = ActorsReceivers()
+        self.load_actors_receivers()
+
+    def load_actors(self):
+        entity = Entity("soleil", ['x'], [0], ['m'])
+        self.actors.add_entity(entity)
+
+    def load_receivers(self):
+        entity = Entity("terre", ['x'], [-2], ['m'])
+        self.receivers.add_entity(entity)
+
+    def load_actors_receivers(self):
+        pass
+
+    def get_state(self):
+        current_state = {'time_start_experiment': self.time_start_experiment,
+                         'system_rel_time': self.current_rel_time,
+                         'timegap': self.timegap}
+        list_actors = []
+        for entity in self.actors.listEntities:
+            list_actors.append(entity.name)
+        current_state['actors'] = list_actors
+
+        list_receivers = []
+        for entity in self.receivers.listEntities:
+            list_receivers.append(entity.name)
+        current_state['receivers'] = list_receivers
+
+        list_actors_receivers = []
+        for entity in self.actors_receivers.listEntities:
+            list_actors_receivers.append(entity.name)
+        current_state['actors_receivers'] = list_actors_receivers
+        return current_state
 
     def set_current_rel_time(self):
         self.current_rel_time += self.timegap

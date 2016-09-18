@@ -14,7 +14,7 @@ class Entity:
         self.props['is_alive'] = True
         # init: bind to time-slot 0 (only properties are always saved on the flow to be able
         # to rebuild back based on time-slots
-        self.data = {0: {self.props}}
+        self.data = {0: self.props}
         # Save units
         self.units = units
         # Effect formula against other entity which is actor(_receiver)

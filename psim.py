@@ -6,6 +6,7 @@ from __future__ import division
 
 import os
 from flask import Flask, jsonify, render_template, request
+from objects.system import System
 
 # from numpy import pi
 # import numpy
@@ -19,6 +20,10 @@ print "Starting Psim.."
 # here : http://www.html5rocks.com/en/tutorials/webcomponents/imports/
 ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), './resources')
 app = Flask(__name__, static_folder=ASSETS_DIR)
+
+mysystem = None
+
+
 # app = Flask(__name__)
 
 
@@ -34,12 +39,18 @@ def get_task():
     return jsonify(ret_data)
 
 
+@app.route('/initsystem/', methods=['GET'])
+def init_system():
+    mysystem = System()
+    ret_data = mysystem.get_state()
+    return jsonify(ret_data)
+
+
 @app.route('/getslotsdata/', methods=['GET'])
-def getNextSlotsData():
-    timeGap = {"value": request.args.get('timegap')}
+def get_next_slots_data():
+    ptrLast = {"value": request.args.get('ptrlast')}
     nbSlotsToGet = {"value": request.args.get('nbslots')}
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-

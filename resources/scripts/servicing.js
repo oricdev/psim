@@ -15,11 +15,40 @@ var nbRequestsData=0;
 var nbRequestsError=0;
 
 
+function initSystem() {
+    $("<p class='" + log_class_normal + "'>").text("[.] Initializing the system..").appendTo(log_ctrlid);
+    $.ajax({
+        type: "GET",
+        url: $SCRIPT_ROOT + "/initsystem/",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            /* data fetched from system:
+            - current_rel_time (int)
+            - timegap (ms)
+            - nb_actors + their names_actors
+            - nb_receivers + their names_receivers
+            - nb_actors_receivers + their names_actors_receivers
+             */
+            $("<p class='logText'>").text("[.] system initialized and ready to start:").appendTo("#logDetails");
+            $("<p class='logSubText'>").text("[.] relative time: "+data['system_rel_time']).appendTo("#logDetails");
+            $("<p class='logSubText'>").text("[.] time-slot: "+data['timegap']+" ms").appendTo("#logDetails");
+            $("<p class='logSubText'>").text("[.] nb of actors: "+data['actors'].length+" ("+data['actors'].toString()+")").appendTo("#logDetails");
+            $("<p class='logSubText'>").text("[.] nb of receivers: "+data['receivers'].length+" ("+data['receivers'].toString()+")").appendTo("#logDetails");
+            $("<p class='logSubText'>").text("[.] nb of actors/receivers: "+data['actors_receivers'].length+" ("+data['actors_receivers'].toString()+")").appendTo("#logDetails");
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            nbRequestsError++;
+            $("<p class=''" + log_class_failure + "'>").text("[./"+nbRequestsError+"] "+textStatus+" :: "+errorThrown).appendTo(log_ctrlid);
+        }
+    });
+}
+
 function requestNextData() {
-    if (nbRequestsData==0) {
-        $("<p class=''" + log_class_normal + "'>").text("["+nbRequestsData+"] Initializing data-set..").appendTo(log_ctrlid);
+    var cur_nbRequestsData = nbRequestsData;
+    if (cur_nbRequestsData==0) {
+        $("<p class=''" + log_class_normal + "'>").text("["+cur_nbRequestsData+"] Initializing data-set..").appendTo(log_ctrlid);
     } else {
-        $("<p class=''" + log_class_normal + "'>").text("["+nbRequestsData+"] fetching data..").appendTo(log_ctrlid);
+        $("<p class=''" + log_class_normal + "'>").text("["+cur_nbRequestsData+"] fetching data..").appendTo(log_ctrlid);
     }
     nbRequestsData++;
     /* Ajax request */
@@ -40,12 +69,14 @@ function requestNextData() {
         type: "GET",
         url: $SCRIPT_ROOT + "/getslotsdata/",
         contentType: "application/json; charset=utf-8",
-        data: {timegap: 1000, nbslots: 10},
+        data: {ptrlast: 0, nbslots: 10},
         success: function (data) {
-            $("<p class='logText'>").text(data.value).appendTo("#logDetails");
+            $("<p class='logText'>").text("["+cur_nbRequestsData+"] "+data.value).appendTo("#logDetails");
+            /* todo: append data and update ptrLastFetch */
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $("<p class=''" + log_class_failure + "'>").text("["+nbRequestsError+"] "+textStatus+" :: "+errorThrown).appendTo(log_ctrlid);
+            nbRequestsError++;
+            $("<p class=''" + log_class_failure + "'>").text("["+cur_nbRequestsData+"/"+nbRequestsError+"] "+textStatus+" :: "+errorThrown).appendTo(log_ctrlid);
         }
     });
 }
